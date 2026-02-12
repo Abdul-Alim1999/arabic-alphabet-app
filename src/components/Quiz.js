@@ -45,7 +45,7 @@ const Quiz = () => {
       setMessage("!Правильно");
     } else {
       setMessage(
-        `Неправильно! Это была буква: ${currentLetter.name} (${currentLetter.letter})`,
+        `(${currentLetter.name}  ${currentLetter.letter}) Неправильно! Это была буква `,
       );
     }
 
@@ -206,4 +206,3 @@ const Quiz = () => {
 };
 
 export default Quiz;
-
