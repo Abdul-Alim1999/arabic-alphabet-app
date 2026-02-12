@@ -87,9 +87,9 @@ const FormQuiz = () => {
     if (!question) return;
 
     if (selectedKey === question.formKey) {
-      setFeedback("Правильно!");
+      setFeedback("!Правильно");
     } else {
-      setFeedback(`Неправильно! Это форма "${formsMap[question.formKey]}" буквы ${question.letter.name}.`);
+      setFeedback(`Неправильно! Это форма "${formsMap[question.formKey]}" буквы ${question.letter.name}`);
     }
 
     setTimeout(() => {

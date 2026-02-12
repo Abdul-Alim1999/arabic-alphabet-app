@@ -35,7 +35,7 @@ const DragDropQuiz = () => {
     const droppedLetter = e.dataTransfer.getData("text/plain");
 
     if (parseInt(droppedLetter) === target.id) {
-      setFeedback("Правильно!");
+      setFeedback("!Правильно");
       setTimeout(() => {
         resetQuiz();
       }, 1500);

@@ -42,7 +42,7 @@ const Quiz = () => {
     if (!currentLetter) return;
 
     if (selected.id === currentLetter.id) {
-      setMessage("Правильно!");
+      setMessage("!Правильно");
     } else {
       setMessage(
         `Неправильно! Это была буква: ${currentLetter.name} (${currentLetter.letter})`,

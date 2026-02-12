@@ -44,10 +44,10 @@ const LetterFormsPage = () => {
 
   const handleTestSubmit = (selectedKey) => {
     if (selectedKey === currentTest.formKey) {
-      setFeedback("Правильно!");
+      setFeedback("!Правильно");
     } else {
       setFeedback(
-        `Неправильно! Это форма "${formsOrder.find((f) => f.key === currentTest.formKey).label}".`,
+        `Неправильно! Это форма "${formsOrder.find((f) => f.key === currentTest.formKey).label}"`,
       );
     }
 
