@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/static/css/main.19a15ac0.css",
-    "main.js": "/static/js/main.c104f41c.js",
-    "index.html": "/index.html",
-    "main.19a15ac0.css.map": "/static/css/main.19a15ac0.css.map",
-    "main.c104f41c.js.map": "/static/js/main.c104f41c.js.map"
+    "main.css": "/arabic-alphabet-app/static/css/main.19a15ac0.css",
+    "main.js": "/arabic-alphabet-app/static/js/main.0605e9e8.js",
+    "index.html": "/arabic-alphabet-app/index.html",
+    "main.19a15ac0.css.map": "/arabic-alphabet-app/static/css/main.19a15ac0.css.map",
+    "main.0605e9e8.js.map": "/arabic-alphabet-app/static/js/main.0605e9e8.js.map"
   },
   "entrypoints": [
     "static/css/main.19a15ac0.css",
-    "static/js/main.c104f41c.js"
+    "static/js/main.0605e9e8.js"
   ]
 }
