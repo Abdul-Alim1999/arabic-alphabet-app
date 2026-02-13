@@ -42,7 +42,7 @@ const DragDropQuiz = () => {
 
     setTarget(targetLetter);
     setOptions([...selected].sort(() => 0.5 - Math.random()));
-    setFeedback('');
+    setFeedback("");
     setFeedbackVisible(false); // Скрываем предыдущее сообщение
   };
 
@@ -117,11 +117,8 @@ const DragDropQuiz = () => {
       }}
     >
       <h2>Перетащи букву в нужное место</h2>
-<<<<<<< HEAD
+
       <p>"{target?.name}"</p>
-=======
-      <p>Перетащите букву "{target?.name}" на нужное место ниже</p>
->>>>>>> 70bf009b82dcd9c29abab6e957a74b6be6ec65ee
 
       {/* Зарезервированное место для сообщения */}
       <div
@@ -137,20 +134,25 @@ const DragDropQuiz = () => {
         <div
           style={{
             opacity: feedbackVisible ? 1 : 0, // Управляем прозрачностью
-            visibility: feedbackVisible ? 'visible' : 'hidden', // Управляем видимостью
-            transform: feedbackVisible ? 'scale(1) translateY(0)' : 'scale(0.9) translateY(-10px)', // Плавное появление/исчезновение
-            transition: 'opacity 0.3s ease, transform 0.3s ease, visibility 0.3s linear', // Плавные переходы
+            visibility: feedbackVisible ? "visible" : "hidden", // Управляем видимостью
+            transform: feedbackVisible
+              ? "scale(1) translateY(0)"
+              : "scale(0.9) translateY(-10px)", // Плавное появление/исчезновение
+            transition:
+              "opacity 0.3s ease, transform 0.3s ease, visibility 0.3s linear", // Плавные переходы
             fontSize: "1.3rem",
             fontWeight: "bold",
             padding: "10px 15px",
             borderRadius: "8px",
             color: feedback.includes("Правильно") ? "#27ae60" : "#e74c3c",
-            backgroundColor: feedback.includes("Правильно") ? "#d4efdf" : "#fadbd8",
+            backgroundColor: feedback.includes("Правильно")
+              ? "#d4efdf"
+              : "#fadbd8",
             border: `2px solid ${feedback.includes("Правильно") ? "#27ae60" : "#e74c3c"}`,
             boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
             display: "inline-block",
             textAlign: "center",
-            pointerEvents: 'none', // Сообщение не мешает кликам под ним
+            pointerEvents: "none", // Сообщение не мешает кликам под ним
             zIndex: 10, // Повышаем z-index
           }}
         >
