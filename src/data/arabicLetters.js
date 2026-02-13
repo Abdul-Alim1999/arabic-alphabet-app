@@ -125,7 +125,7 @@ export const arabicLetters = [
       isolated: "ر",
       initial: "ر",
       medial: "ـر",
-      final: "ﺮ",
+      final: "ـر",
     },
     audio: "/audio/ra.mp3",
   },
