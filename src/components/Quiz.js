@@ -44,7 +44,7 @@ const Quiz = () => {
 
     setCurrentLetter(correctLetter);
     setOptions(shuffledOptions);
-    setMessage('');
+    setMessage("");
     setMessageVisible(false); // Скрываем предыдущее сообщение
   };
 
@@ -61,11 +61,7 @@ const Quiz = () => {
       setMessage(`.(${currentLetter.name}) Правильно! это буква`);
     } else {
       setMessage(
-<<<<<<< HEAD
         `${currentLetter.name} (${currentLetter.letter}) Неправильно! Это была буква`,
-=======
-        `(${currentLetter.name}  ${currentLetter.letter}) Неправильно! Это была буква `,
->>>>>>> 70bf009b82dcd9c29abab6e957a74b6be6ec65ee
       );
     }
     setMessageVisible(true); // Показываем сообщение
@@ -140,20 +136,25 @@ const Quiz = () => {
         <div
           style={{
             opacity: messageVisible ? 1 : 0,
-            visibility: messageVisible ? 'visible' : 'hidden',
-            transform: messageVisible ? 'scale(1) translateY(0)' : 'scale(0.9) translateY(-10px)',
-            transition: 'opacity 0.3s ease, transform 0.3s ease, visibility 0.3s linear',
+            visibility: messageVisible ? "visible" : "hidden",
+            transform: messageVisible
+              ? "scale(1) translateY(0)"
+              : "scale(0.9) translateY(-10px)",
+            transition:
+              "opacity 0.3s ease, transform 0.3s ease, visibility 0.3s linear",
             fontSize: "1.3rem",
             fontWeight: "bold",
             padding: "10px 15px",
             borderRadius: "8px",
             color: message.includes("Правильно") ? "#27ae60" : "#e74c3c",
-            backgroundColor: message.includes("Правильно") ? "#d4efdf" : "#fadbd8",
+            backgroundColor: message.includes("Правильно")
+              ? "#d4efdf"
+              : "#fadbd8",
             border: `2px solid ${message.includes("Правильно") ? "#27ae60" : "#e74c3c"}`,
             boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
             display: "inline-block",
             textAlign: "center",
-            pointerEvents: 'none',
+            pointerEvents: "none",
             zIndex: 10,
           }}
         >
@@ -240,9 +241,3 @@ const Quiz = () => {
     </div>
   );
 };
-
-<<<<<<< HEAD
-export default Quiz;
-=======
-export default Quiz;
->>>>>>> 70bf009b82dcd9c29abab6e957a74b6be6ec65ee
