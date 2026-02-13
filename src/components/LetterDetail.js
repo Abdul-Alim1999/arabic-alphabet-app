@@ -247,7 +247,7 @@ const LetterDetail = () => {
           onClick={() => window.history.back()}
           style={{
             padding: "10px 15px",
-            backgroundColor: "#e74c3c",
+            backgroundColor: "#2ecc71",
             color: "white",
             border: "none",
             borderRadius: "8px",
