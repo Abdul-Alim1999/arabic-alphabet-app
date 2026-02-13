@@ -61,7 +61,11 @@ const Quiz = () => {
       setMessage(`.(${currentLetter.name}) Правильно! это буква`);
     } else {
       setMessage(
+<<<<<<< HEAD
         `${currentLetter.name} (${currentLetter.letter}) Неправильно! Это была буква`,
+=======
+        `(${currentLetter.name}  ${currentLetter.letter}) Неправильно! Это была буква `,
+>>>>>>> 70bf009b82dcd9c29abab6e957a74b6be6ec65ee
       );
     }
     setMessageVisible(true); // Показываем сообщение
@@ -237,4 +241,8 @@ const Quiz = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Quiz;
+=======
+export default Quiz;
+>>>>>>> 70bf009b82dcd9c29abab6e957a74b6be6ec65ee

@@ -117,7 +117,11 @@ const DragDropQuiz = () => {
       }}
     >
       <h2>Перетащи букву в нужное место</h2>
+<<<<<<< HEAD
       <p>"{target?.name}"</p>
+=======
+      <p>Перетащите букву "{target?.name}" на нужное место ниже</p>
+>>>>>>> 70bf009b82dcd9c29abab6e957a74b6be6ec65ee
 
       {/* Зарезервированное место для сообщения */}
       <div
@@ -159,8 +163,8 @@ const DragDropQuiz = () => {
         onDrop={(e) => handleDrop(e, target)}
         onDragOver={(e) => e.preventDefault()}
         style={{
-          width: "100px",
-          height: "100px",
+          width: "80px",
+          height: "80px",
           border: "2px dashed #ccc",
           margin: "20px auto",
           display: "flex",
