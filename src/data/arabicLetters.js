@@ -2,7 +2,7 @@ export const arabicLetters = [
   {
     id: 1,
     letter: "ا",
-    name: "Альиф",
+    name: "Алиф",
     transliteration: "a",
     forms: {
       isolated: "ا",

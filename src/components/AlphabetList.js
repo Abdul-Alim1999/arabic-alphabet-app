@@ -150,9 +150,9 @@ const AlphabetList = () => {
               e.currentTarget.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
             }}
           >
-            <div style={{ fontSize: "32px" }}>{letter.letter}</div>
+            <div style={{ fontSize: "40px" }}>{letter.letter}</div>
             <div
-              style={{ fontSize: "14px", marginTop: "5px", fontWeight: "bold" }}
+              style={{ fontSize: "16px", marginTop: "5px", fontWeight: "bold", }}
             >
               {letter.name}
             </div>{" "}

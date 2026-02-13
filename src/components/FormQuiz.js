@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,7 +7,18 @@ const FormQuiz = () => {
   const [question, setQuestion] = useState(null);
   const [options, setOptions] = useState([]);
   const [feedback, setFeedback] = useState('');
+  const [feedbackVisible, setFeedbackVisible] = useState(false);
   const navigate = useNavigate();
+  const messageTimeoutRef = useRef(null); // Для управления таймером
+
+  // Очищаем таймер при размонтировании
+  useEffect(() => {
+    return () => {
+      if (messageTimeoutRef.current) {
+        clearTimeout(messageTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const formsMap = {
     initial: "начальная",
@@ -17,9 +28,12 @@ const FormQuiz = () => {
   };
 
   const getRandomFormQuestion = () => {
-    // Проверяем, есть ли буквы
+    if (messageTimeoutRef.current) {
+      clearTimeout(messageTimeoutRef.current);
+    }
     if (!letters || letters.length === 0) {
       setFeedback("Данные ещё не загружены...");
+      setFeedbackVisible(true);
       return;
     }
 
@@ -27,6 +41,7 @@ const FormQuiz = () => {
 
     if (filtered.length === 0) {
       setFeedback("Нет доступных букв с формами.");
+      setFeedbackVisible(true);
       return;
     }
 
@@ -51,11 +66,31 @@ const FormQuiz = () => {
     setQuestion({ letter: randomLetter, formKey: chosenFormKey, formValue: chosenFormValue });
     setOptions(allOptions);
     setFeedback('');
+    setFeedbackVisible(false); // Скрываем предыдущее сообщение
   };
 
   useEffect(() => {
     getRandomFormQuestion();
-  }, [letters]); // Зависимость от letters
+  }, [letters]);
+
+  const handleAnswer = (selectedKey) => {
+    if (!question) return;
+
+    if (selectedKey === question.formKey) {
+      setFeedback(`.Правильно! Это форма "${formsMap[question.formKey]}" буквы ${question.letter.name}`);
+    } else {
+      setFeedback(`.Неправильно! Это форма "${formsMap[question.formKey]}" буквы ${question.letter.name}`);
+    }
+    setFeedbackVisible(true); // Показываем сообщение
+
+    // Убираем сообщение через 2.2 секунды и генерируем новый вопрос
+    messageTimeoutRef.current = setTimeout(() => {
+      setFeedbackVisible(false); // Сначала скрываем
+      setTimeout(() => {
+        getRandomFormQuestion(); // Потом генерируем новый вопрос
+      }, 150); // Небольшая задержка для анимации
+    }, 2200);
+  };
 
   if (!letters || letters.length === 0) {
     return (
@@ -82,21 +117,6 @@ const FormQuiz = () => {
       </div>
     );
   }
-
-  const handleAnswer = (selectedKey) => {
-    if (!question) return;
-
-    if (selectedKey === question.formKey) {
-      setFeedback("!Правильно");
-    } else {
-      setFeedback(`Неправильно! Это форма "${formsMap[question.formKey]}" буквы ${question.letter.name}`);
-    }
-
-    setTimeout(() => {
-      setFeedback('');
-      getRandomFormQuestion();
-    }, 1500);
-  };
 
   if (!question) {
     return (
@@ -125,31 +145,45 @@ const FormQuiz = () => {
   }
 
   return (
-    <div style={{ padding: '20px', textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
+    <div style={{ padding: '20px', textAlign: 'center', maxWidth: '800px', margin: '0 auto', position: 'relative' }}>
       <h2>Тест: Узнай форму буквы</h2>
 
-      {feedback && (
+      {/* Зарезервированное место для сообщения */}
+      <div
+        style={{
+          height: "60px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: "20px",
+        }}
+      >
+        {/* Внутренний контейнер для сообщения */}
         <div
           style={{
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
-            margin: '20px 0',
-            padding: '15px',
-            borderRadius: '8px',
+            opacity: feedbackVisible ? 1 : 0,
+            visibility: feedbackVisible ? 'visible' : 'hidden',
+            transform: feedbackVisible ? 'scale(1) translateY(0)' : 'scale(0.9) translateY(-10px)',
+            transition: 'opacity 0.3s ease, transform 0.3s ease, visibility 0.3s linear',
+            fontSize: "1.3rem",
+            fontWeight: "bold",
+            padding: "10px 15px",
+            borderRadius: "8px",
             color: feedback.includes("Правильно") ? "#27ae60" : "#e74c3c",
             backgroundColor: feedback.includes("Правильно") ? "#d4efdf" : "#fadbd8",
             border: `2px solid ${feedback.includes("Правильно") ? "#27ae60" : "#e74c3c"}`,
-            boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-            transition: 'all 0.3s ease',
-            display: 'inline-block',
-            minWidth: '200px'
+            boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+            display: "inline-block",
+            textAlign: "center",
+            pointerEvents: 'none',
+            zIndex: 10,
           }}
         >
           {feedback}
         </div>
-      )}
+      </div>
 
-      <div style={{ textAlign: 'center', fontSize: '48px', margin: '20px 0' }}>
+      <div style={{ textAlign: 'center', fontSize: '48px', margin: '10px 0' }}>
         {question.formValue}
       </div>
 

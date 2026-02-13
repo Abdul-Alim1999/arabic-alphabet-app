@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -7,11 +7,26 @@ const Quiz = () => {
   const [currentLetter, setCurrentLetter] = useState(null);
   const [options, setOptions] = useState([]);
   const [message, setMessage] = useState("");
+  const [messageVisible, setMessageVisible] = useState(false);
   const navigate = useNavigate();
+  const messageTimeoutRef = useRef(null); // Для управления таймером
+
+  // Очищаем таймер при размонтировании
+  useEffect(() => {
+    return () => {
+      if (messageTimeoutRef.current) {
+        clearTimeout(messageTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const startNewQuestion = () => {
+    if (messageTimeoutRef.current) {
+      clearTimeout(messageTimeoutRef.current);
+    }
     if (!letters || letters.length < 4) {
       setMessage("Недостаточно букв для теста");
+      setMessageVisible(true);
       return;
     }
 
@@ -29,30 +44,35 @@ const Quiz = () => {
 
     setCurrentLetter(correctLetter);
     setOptions(shuffledOptions);
-    setMessage("");
+    setMessage('');
+    setMessageVisible(false); // Скрываем предыдущее сообщение
   };
 
   useEffect(() => {
     if (letters && letters.length > 0) {
       startNewQuestion();
     }
-  }, [letters]); // Зависимость от letters
+  }, [letters]);
 
   const handleSelect = (selected) => {
     if (!currentLetter) return;
 
     if (selected.id === currentLetter.id) {
-      setMessage("!Правильно");
+      setMessage(`.(${currentLetter.name}) Правильно! это буква`);
     } else {
       setMessage(
-        `Неправильно! Это была буква: ${currentLetter.name} (${currentLetter.letter})`,
+        `${currentLetter.name} (${currentLetter.letter}) Неправильно! Это была буква`,
       );
     }
+    setMessageVisible(true); // Показываем сообщение
 
-    setTimeout(() => {
-      setMessage("");
-      startNewQuestion();
-    }, 1500);
+    // Убираем сообщение через 1.5 секунды и генерируем новый вопрос
+    messageTimeoutRef.current = setTimeout(() => {
+      setMessageVisible(false); // Сначала скрываем
+      setTimeout(() => {
+        startNewQuestion(); // Потом генерируем новый вопрос
+      }, 150); // Небольшая задержка для анимации
+    }, 2200);
   };
 
   // Если данные не загружены
@@ -97,43 +117,55 @@ const Quiz = () => {
         textAlign: "center",
         maxWidth: "800px",
         margin: "0 auto",
+        position: "relative",
       }}
     >
       <h2>Тест на знание арабского алфавита</h2>
 
-      {/* Красивый блок с результатом */}
-      {message && (
+      {/* Зарезервированное место для сообщения */}
+      <div
+        style={{
+          height: "60px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: "20px",
+        }}
+      >
+        {/* Внутренний контейнер для сообщения */}
         <div
           style={{
-            fontSize: "1.5rem",
+            opacity: messageVisible ? 1 : 0,
+            visibility: messageVisible ? 'visible' : 'hidden',
+            transform: messageVisible ? 'scale(1) translateY(0)' : 'scale(0.9) translateY(-10px)',
+            transition: 'opacity 0.3s ease, transform 0.3s ease, visibility 0.3s linear',
+            fontSize: "1.3rem",
             fontWeight: "bold",
-            margin: "20px 0",
-            padding: "15px",
+            padding: "10px 15px",
             borderRadius: "8px",
             color: message.includes("Правильно") ? "#27ae60" : "#e74c3c",
-            backgroundColor: message.includes("Правильно")
-              ? "#d4efdf"
-              : "#fadbd8",
+            backgroundColor: message.includes("Правильно") ? "#d4efdf" : "#fadbd8",
             border: `2px solid ${message.includes("Правильно") ? "#27ae60" : "#e74c3c"}`,
             boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-            transition: "all 0.3s ease",
             display: "inline-block",
-            minWidth: "200px",
+            textAlign: "center",
+            pointerEvents: 'none',
+            zIndex: 10,
           }}
         >
           {message}
         </div>
-      )}
+      </div>
 
       {currentLetter && (
         <>
           <h3
-            style={{ fontSize: "48px", textAlign: "center", margin: "20px 0" }}
+            style={{ fontSize: "48px", textAlign: "center", margin: "10px 0" }}
           >
             {currentLetter.letter}
           </h3>
           <p style={{ fontSize: "1.2rem", marginBottom: "20px" }}>
-            Выберите название этой буквы
+            :Выберите название этой буквы
           </p>
           <div
             style={{
@@ -206,4 +238,3 @@ const Quiz = () => {
 };
 
 export default Quiz;
-

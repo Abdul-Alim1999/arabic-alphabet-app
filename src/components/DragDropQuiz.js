@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +7,18 @@ const DragDropQuiz = () => {
   const [target, setTarget] = useState(null);
   const [options, setOptions] = useState([]);
   const [feedback, setFeedback] = useState("");
+  const [feedbackVisible, setFeedbackVisible] = useState(false);
   const navigate = useNavigate();
+  const feedbackTimeoutRef = useRef(null); // Для управления таймером
+
+  // Очищаем таймер при размонтировании
+  useEffect(() => {
+    return () => {
+      if (feedbackTimeoutRef.current) {
+        clearTimeout(feedbackTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (letters && letters.length > 0) {
@@ -16,8 +27,12 @@ const DragDropQuiz = () => {
   }, [letters]);
 
   const resetQuiz = () => {
+    if (feedbackTimeoutRef.current) {
+      clearTimeout(feedbackTimeoutRef.current);
+    }
     if (!letters || letters.length === 0) {
       setFeedback("Данные ещё не загружены...");
+      setFeedbackVisible(true);
       return;
     }
 
@@ -27,7 +42,8 @@ const DragDropQuiz = () => {
 
     setTarget(targetLetter);
     setOptions([...selected].sort(() => 0.5 - Math.random()));
-    setFeedback("");
+    setFeedback('');
+    setFeedbackVisible(false); // Скрываем предыдущее сообщение
   };
 
   const handleDrop = (e, letter) => {
@@ -35,16 +51,19 @@ const DragDropQuiz = () => {
     const droppedLetter = e.dataTransfer.getData("text/plain");
 
     if (parseInt(droppedLetter) === target.id) {
-      setFeedback("!Правильно");
-      setTimeout(() => {
-        resetQuiz();
-      }, 1500);
+      setFeedback(`.Правильно! Это буква: ${target.name}`);
     } else {
-      setFeedback(`Неправильно! Это была буква: ${target.name}`);
-      setTimeout(() => {
-        setFeedback("");
-      }, 1500);
+      setFeedback(`.Неправильно! Это была буква: ${target.name}`);
     }
+    setFeedbackVisible(true); // Показываем сообщение
+
+    // Убираем сообщение через 2.2 секунды и генерируем новый вопрос
+    feedbackTimeoutRef.current = setTimeout(() => {
+      setFeedbackVisible(false); // Сначала скрываем
+      setTimeout(() => {
+        resetQuiz(); // Потом генерируем новый вопрос
+      }, 150); // Небольшая задержка для анимации
+    }, 2200);
   };
 
   const handleDragStart = (e, letterId) => {
@@ -94,34 +113,46 @@ const DragDropQuiz = () => {
         textAlign: "center",
         maxWidth: "800px",
         margin: "0 auto",
+        position: "relative", // Важно для позиционирования потомка с position: absolute
       }}
     >
       <h2>Перетащи букву в нужное место</h2>
-      <p>Перетащите букву "{target?.name}" на нужное место ниже.</p>
+      <p>"{target?.name}"</p>
 
-      {/* Красивый блок с результатом */}
-      {feedback && (
+      {/* Зарезервированное место для сообщения */}
+      <div
+        style={{
+          height: "60px", // Фиксируем высоту
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: "20px",
+        }}
+      >
+        {/* Внутренний контейнер для сообщения */}
         <div
           style={{
-            fontSize: "1.5rem",
+            opacity: feedbackVisible ? 1 : 0, // Управляем прозрачностью
+            visibility: feedbackVisible ? 'visible' : 'hidden', // Управляем видимостью
+            transform: feedbackVisible ? 'scale(1) translateY(0)' : 'scale(0.9) translateY(-10px)', // Плавное появление/исчезновение
+            transition: 'opacity 0.3s ease, transform 0.3s ease, visibility 0.3s linear', // Плавные переходы
+            fontSize: "1.3rem",
             fontWeight: "bold",
-            margin: "20px 0",
-            padding: "15px",
+            padding: "10px 15px",
             borderRadius: "8px",
             color: feedback.includes("Правильно") ? "#27ae60" : "#e74c3c",
-            backgroundColor: feedback.includes("Правильно")
-              ? "#d4efdf"
-              : "#fadbd8",
+            backgroundColor: feedback.includes("Правильно") ? "#d4efdf" : "#fadbd8",
             border: `2px solid ${feedback.includes("Правильно") ? "#27ae60" : "#e74c3c"}`,
             boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-            transition: "all 0.3s ease",
             display: "inline-block",
-            minWidth: "200px",
+            textAlign: "center",
+            pointerEvents: 'none', // Сообщение не мешает кликам под ним
+            zIndex: 10, // Повышаем z-index
           }}
         >
           {feedback}
         </div>
-      )}
+      </div>
 
       {/* Цель (куда нужно перетащить) */}
       <div

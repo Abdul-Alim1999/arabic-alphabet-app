@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef,  } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -105,7 +105,7 @@ const LetterDetail = () => {
 
       {/* Формы буквы */}
       <div style={{ marginTop: "30px" }}>
-        <h4>Формы буквы:</h4>
+        <h4>:Формы буквы</h4>
         <table
           style={{
             width: "100%",
