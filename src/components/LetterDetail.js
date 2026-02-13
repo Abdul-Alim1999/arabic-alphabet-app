@@ -326,7 +326,7 @@ const LetterDetail = () => {
 
       {/* Формы буквы */}
       <div style={{ marginTop: "25px" }}>
-        <h4>Формы буквы:</h4>
+        <h4>:Формы буквы</h4>
         {isMobileView ? (
           // Карточки для мобильных
           <div
